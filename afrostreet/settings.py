@@ -15,7 +15,7 @@ load_dotenv()
 SECRET_KEY = 'django-insecure-kewn5y0l^uyd+b(=6mqrh5cnw1+*dp4yh+uzl3$k)wobkv@rbo'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = [
         'localhost',
@@ -78,12 +78,22 @@ WSGI_APPLICATION = 'afrostreet.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+if os.environ.get('HEROKU_POSTGRESQL_COBALT_URL'):
+    DATABASES = {
+        'default': dj_database_url.config(
+            env='HEROKU_POSTGRESQL_COBALT_URL',
+            conn_max_age=600,
+            ssl_require=True
+        )
     }
-}
+else:
+    # Local fallback
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Password validation
@@ -173,22 +183,7 @@ EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
-if 'HEROKU_POSTGRESQL_COBALT_URL' in os.environ:
-    # Production (Heroku)
-    DATABASES = {
-        'default': dj_database_url.config(
-            conn_max_age=0,
-            ssl_require=True
-        )
-    }
-else:
-    # Development (Local)
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 django_heroku.settings(locals())
 
