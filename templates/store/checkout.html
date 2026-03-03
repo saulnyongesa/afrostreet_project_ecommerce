@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Secure Checkout | Afrostreet{% endblock %}
+
+{% block content %}
+<div class="row mb-5">
+    <div class="col-12">
+        <h2 class="fw-bold text-dark border-bottom pb-3">Secure Checkout</h2>
+    </div>
+</div>
+
+<div class="row g-5">
+    <div class="col-lg-7">
+        <div class="card border-0 shadow-sm p-4">
+            <h4 class="fw-bold mb-4">Shipping Information</h4>
+            
+            <form id="checkoutForm">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Full Name</label>
+                        <input type="text" id="chkName" class="form-control" value="{{ user.full_name|default:'' }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label text-muted small">Email Address</label>
+                        <input type="email" id="chkEmail" class="form-control" value="{{ user.email|default:'' }}" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label text-muted small">Phone Number (M-Pesa format e.g. 0712...)</label>
+                        <input type="text" id="chkPhone" class="form-control" required>
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label text-muted small">Delivery Address (City, Estate, Building)</label>
+                        <textarea id="chkAddress" class="form-control" rows="3" required></textarea>
+                    </div>
+                </div>
+                
+                <hr class="my-4">
+                
+                <button type="submit" id="placeOrderBtn" class="btn btn-khaki btn-lg w-100 fw-bold transition-hover">
+                    Pay Securely with M-Pesa
+                </button>
+
+                <div id="mpesaInstructionBox" class="d-none mt-4 p-4 border border-success rounded bg-light text-center shadow-sm">
+                    <div class="spinner-grow text-success mb-3" role="status"></div>
+                    <h5 class="fw-bold text-dark">Check your phone!</h5>
+                    <p class="text-muted">We've sent an M-Pesa prompt to your phone. Enter your PIN to complete the order.</p>
+                    <hr>
+                    <p class="small text-muted mb-2">Didn't get the prompt? Pay manually:</p>
+                    <div class="bg-white p-3 rounded border text-start d-inline-block">
+                        <strong class="text-muted">Paybill:</strong> <span class="text-dark fw-bold">4043381</span> <br>
+                        <strong class="text-muted">Account:</strong> <span id="displayAccountNumber" class="text-success fw-bold fs-5">Loading...</span><br>
+                        <strong class="text-muted">Amount:</strong> <span id="displayAmount" class="text-dark fw-bold">Loading...</span>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card border-0 shadow-sm p-4 bg-light">
+            <h5 class="fw-bold mb-4">Order Summary</h5>
+            <div id="checkoutItemsContainer" class="mb-4">
+                </div>
+            <hr>
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="text-muted">Subtotal</span>
+                <span class="fw-bold" id="checkoutSubtotal">KSh 0</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted">Delivery</span>
+                <span class="text-success fw-bold">You Will Pay on Delivery</span>
+            </div>
+            <div class="d-flex justify-content-between align-items-center border-top pt-3">
+                <span class="fw-bold fs-5">Total</span>
+                <span class="fw-bold fs-4 text-dark" id="checkoutTotal">KSh 0</span>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/pages/checkout.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,27 @@
+<div class="offcanvas offcanvas-end shadow" tabindex="-1" id="cartOffcanvas" aria-labelledby="cartOffcanvasLabel">
+    <div class="offcanvas-header border-bottom bg-khaki text-white">
+        <h5 class="offcanvas-title fw-bold" id="cartOffcanvasLabel">🛒 Your Cart</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    
+    <div class="offcanvas-body d-flex flex-column">
+        <div id="cartItemsContainer" class="flex-grow-1 overflow-auto pe-2">
+            <div class="text-center text-muted mt-5">
+                <span class="fs-1">🛍️</span>
+                <p class="mt-2">Your cart is currently empty.</p>
+                <button class="btn btn-outline-khaki mt-3" data-bs-dismiss="offcanvas">Continue Shopping</button>
+            </div>
+        </div>
+
+        <div class="border-top pt-3 mt-3 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <span class="text-muted fw-bold">Subtotal:</span>
+                <span class="fs-5 fw-bold text-dark" id="cartSubtotal">KSh 0</span>
+            </div>
+            <p class="small text-muted mb-3">Delivery fees and taxes calculated at checkout.</p>
+            <button class="btn btn-dark w-100 fw-bold py-2 mb-2" id="checkoutBtn" disabled>
+                Proceed to Checkout
+            </button>
+        </div>
+    </div>
+</div>

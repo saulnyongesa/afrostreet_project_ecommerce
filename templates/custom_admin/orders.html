@@ -1,0 +1,175 @@
+{% extends 'custom_admin/admin_base.html' %}
+{% load static %}
+
+{% block page_title %}Order Management{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex gap-3 align-items-center">
+        <h5 class="fw-bold text-dark m-0">Customer Orders</h5>
+        <select class="form-select form-select-sm shadow-sm" id="orderStatusFilter" style="width: auto;">
+            <option value="">All Orders</option>
+            <option value="Pending Payment">Pending Payment</option>
+            <option value="Processing">Processing (Paid)</option>
+            <option value="Shipped">Shipped</option>
+            <option value="Delivered">Delivered</option>
+            <option value="Cancelled">Cancelled</option>
+        </select>
+    </div>
+    
+    <button class="btn btn-dark fw-bold shadow-sm" id="adminCreateOrderBtn" disabled>
+        🛒 Create Manual Order (Coming Next)
+    </button>
+</div>
+
+<div class="card admin-card p-0 overflow-hidden shadow-sm">
+    <div class="table-responsive" style="min-height: 400px;">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th class="ps-4">Order ID & Date</th>
+                    <th>Customer Info</th>
+                    <th>M-Pesa Account</th>
+                    <th>Total Amount</th>
+                    <th>Update Status</th>
+                    <th class="text-end pe-4">Details</th>
+                </tr>
+            </thead>
+            <tbody id="ordersTableBody">
+                <tr><td colspan="6" class="text-center py-5 text-muted"><div class="spinner-border spinner-border-sm"></div> Loading orders...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="orderDetailsModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-dark text-white border-0">
+                <h5 class="modal-title fw-bold" id="detailModalTitle">Order Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body bg-light p-4" id="orderDetailsContent">
+                </div>
+            <div class="modal-footer border-0 bg-white">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="adminCreateOrderModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-dark text-white border-0">
+                <h5 class="modal-title fw-bold">🛒 Create Manual Order</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body bg-light p-4">
+                
+                <div class="card border-0 shadow-sm p-3 mb-4">
+                    <h6 class="fw-bold border-bottom pb-2 mb-3">👤 Customer Details</h6>
+                    <div class="input-group mb-3">
+                        <input type="email" id="manualOrderEmail" class="form-control" placeholder="Customer Email">
+                        <button class="btn btn-dark" type="button" id="checkUserBtn">Check User</button>
+                    </div>
+                    
+                    <div id="newUserFields" class="d-none row g-2">
+                        <div class="col-md-6">
+                            <input type="text" id="manualOrderName" class="form-control" placeholder="Full Name">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" id="manualOrderPhone" class="form-control" placeholder="Phone Number">
+                        </div>
+                        <div class="col-12">
+                            <div class="alert alert-info small py-2 mb-0">
+                                ℹ️ User not found. Fill details to auto-create account (Password = Email).
+                            </div>
+                        </div>
+                    </div>
+                    <div id="userFeedback" class="fw-bold text-success mt-2"></div>
+                    <input type="hidden" id="selectedUserId">
+                </div>
+
+                <div class="card border-0 shadow-sm p-3 opacity-50" id="productSelectionSection" style="pointer-events: none;">
+                    <h6 class="fw-bold border-bottom pb-2 mb-3">🛍️ Order Items</h6>
+                    
+                    <div class="position-relative mb-3">
+                        <input type="text" id="adminProductSearch" class="form-control" placeholder="Search product by name...">
+                        <div id="adminProductSearchResults" class="list-group position-absolute w-100 shadow-lg d-none" style="z-index: 1050; max-height: 200px; overflow-y: auto;"></div>
+                    </div>
+
+                    <table class="table table-sm table-bordered bg-white">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Product</th>
+                                <th style="width: 80px;">Qty</th>
+                                <th>Price</th>
+                                <th>Total</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminCartBody">
+                            <tr><td colspan="5" class="text-center text-muted">No items added.</td></tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <td colspan="3" class="text-end fw-bold">Grand Total:</td>
+                                <td colspan="2" class="fw-bold fs-5 text-khaki" id="adminCartTotal">KSh 0</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </div>
+            <div class="modal-footer border-0 bg-white">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-khaki fw-bold px-4" id="submitManualOrderBtn" disabled>
+                    Place Order
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="editOrderModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-dark text-white border-0">
+                <h5 class="modal-title fw-bold">✏️ Edit Order Details</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body bg-light p-4">
+                <form id="editOrderForm">
+                    <input type="hidden" id="editOrderId">
+                    
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Customer Name</label>
+                        <input type="text" id="editOrderName" class="form-control" required>
+                    </div>
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Email</label>
+                            <input type="email" id="editOrderEmail" class="form-control" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold">Phone Number</label>
+                            <input type="text" id="editOrderPhone" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Shipping Address</label>
+                        <textarea id="editOrderAddress" class="form-control" rows="3" required></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 bg-white">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-khaki fw-bold px-4" id="saveOrderUpdateBtn">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/admin/admin_orders.js' %}"></script>
+{% endblock %}

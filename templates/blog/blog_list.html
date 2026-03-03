@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Afrostreet Blog - Fashion & Trends{% endblock %}
+
+{% block content %}
+<div class="mb-4 bg-khaki text-white p-5 rounded text-center shadow-sm">
+    <h1 class="fw-bold">Afrostreet Style Hub</h1>
+    <p class="lead">Fashion tips, modeling events, and behind-the-scenes tutorials.</p>
+</div>
+
+<div class="row g-4" id="blogListContainer">
+    <div class="col-12 text-center py-5">
+        <div class="spinner-border text-khaki" role="status"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const response = await fetch('/api/blog/articles/');
+        const articles = await response.json();
+        const container = document.getElementById('blogListContainer');
+        
+        if (articles.length === 0) {
+            container.innerHTML = '<div class="col-12 text-center text-muted">No articles published yet.</div>';
+            return;
+        }
+
+        container.innerHTML = articles.map(article => `
+            <div class="col-md-4">
+                <div class="card h-100 border-0 shadow-sm transition-hover">
+                    <img src="/media/${article.cover_image}" class="card-img-top" style="height: 200px; object-fit: cover;">
+                    <div class="card-body">
+                        <small class="text-khaki fw-bold">${new Date(article.created_at).toLocaleDateString()}</small>
+                        <h5 class="card-title mt-2 fw-bold text-dark">${article.title}</h5>
+                        <p class="text-muted small">By ${article.author_name}</p>
+                        <a href="/blog/${article.slug}/" class="btn btn-outline-dark btn-sm mt-2">Read More</a>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    } catch (error) {
+        console.error("Failed to load blog articles:", error);
+    }
+});
+</script>
+{% endblock %}

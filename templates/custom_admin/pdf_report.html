@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Helvetica', sans-serif; color: #333; margin: 0; padding: 20px; }
+        .header { border-bottom: 2px solid #c3a37a; padding-bottom: 10px; margin-bottom: 30px; }
+        .header h1 { margin: 0; color: #1e1e2d; }
+        .header p { margin: 5px 0 0 0; color: #666; font-size: 14px; }
+        
+        .metrics-grid { width: 100%; border-collapse: collapse; margin-bottom: 40px; }
+        .metrics-grid td { padding: 15px; border: 1px solid #eee; text-align: center; background: #f9f9f9; }
+        .metrics-grid h2 { margin: 0 0 5px 0; color: #1e1e2d; font-size: 24px; }
+        .metrics-grid span { color: #888; font-size: 12px; text-transform: uppercase; font-weight: bold; }
+
+        .table { width: 100%; border-collapse: collapse; margin-top: 20px; font-size: 14px; }
+        .table th, .table td { padding: 10px; border-bottom: 1px solid #ddd; text-align: left; }
+        .table th { background-color: #f4f6f9; color: #1e1e2d; }
+        
+        .footer { position: fixed; bottom: 0; width: 100%; text-align: center; font-size: 10px; color: #999; border-top: 1px solid #eee; padding-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Afrostreet Business Report</h1>
+        <p><strong>Timeframe:</strong> Last {{ timeframe }} | <strong>Generated On:</strong> {{ date_generated|date:"F j, Y, g:i a" }}</p>
+    </div>
+
+    <table class="metrics-grid">
+        <tr>
+            <td>
+                <h2>KSh {{ total_revenue|floatformat:2 }}</h2>
+                <span>Total Revenue</span>
+            </td>
+            <td>
+                <h2>{{ total_orders }}</h2>
+                <span>Orders Placed</span>
+            </td>
+            <td>
+                <h2>{{ new_users }}</h2>
+                <span>New Customers</span>
+            </td>
+        </tr>
+    </table>
+
+    <h3>Recent Orders Summary</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order ID</th>
+                <th>Date</th>
+                <th>Customer Name</th>
+                <th>Status</th>
+                <th>Total (KSh)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in recent_orders %}
+            <tr>
+                <td>#{{ order.id }}</td>
+                <td>{{ order.created_at|date:"M j, Y" }}</td>
+                <td>{{ order.full_name }}</td>
+                <td>{{ order.status }}</td>
+                <td>{{ order.total_amount }}</td>
+            </tr>
+            {% empty %}
+            <tr><td colspan="5" style="text-align: center;">No orders found in this period.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="footer">
+        Confidential - Generated securely via Afrostreet Admin Dashboard
+    </div>
+</body>
+</html>

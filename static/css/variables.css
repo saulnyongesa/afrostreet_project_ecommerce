@@ -1,0 +1,110 @@
+/* static/css/variables.css */
+:root {
+    /* Theme Colors */
+    --afro-khaki: #C3B091;       /* Main Khaki Brown */
+    --afro-khaki-dark: #A69070;  /* Darker shade for hover states */
+    --afro-khaki-light: #EBE5DB; /* Very light khaki for backgrounds */
+    --afro-white: #FFFFFF;
+    --afro-dark: #333333;        /* Soft black for text */
+    
+    /* Jumia-style layout variables */
+    --nav-height: 70px;
+}
+
+body {
+    background-color: #F5F5F5; /* Off-white background similar to Jumia to make product cards pop */
+    color: var(--afro-dark);
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Custom utility classes */
+.bg-khaki { background-color: var(--afro-khaki) !important; color: var(--afro-white); }
+.text-khaki { color: var(--afro-khaki) !important; }
+.btn-khaki { 
+    background-color: var(--afro-khaki); 
+    color: var(--afro-white); 
+    border: none;
+}
+.btn-khaki:hover { 
+    background-color: var(--afro-khaki-dark); 
+    color: var(--afro-white);
+}
+
+/* --- Mobile Responsiveness --- */
+
+/* Make product cards touch-friendly */
+.product-card {
+    border-radius: 8px;
+}
+
+.product-card .card-title {
+    font-size: 0.9rem; /* Slightly smaller text on mobile */
+}
+
+.product-card .fs-5 {
+    font-size: 1rem !important; /* Scale down price font on mobile */
+}
+
+/* Responsive Image Heights */
+.product-image-adaptive {
+    height: fit-content;
+    /* object-fit: cover; */
+}
+
+.hero-image-adaptive {
+    height: 400px;
+    object-fit: cover;
+}
+
+@media (max-width: 768px) {
+    .product-image-adaptive {
+        height: 150px; /* Shorter images so 2 cards fit nicely on screen */
+    }
+    
+    .hero-image-adaptive {
+        height: 250px; /* Prevent hero banner from taking the entire mobile screen */
+    }
+
+    /* Hide horizontal scrollbar for mobile category list */
+    .mobile-scroll-container::-webkit-scrollbar {
+        display: none;
+    }
+    .mobile-scroll-container {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+}
+
+/* --- Featured Cards Scrolling Slider --- */
+.scrolling-wrapper {
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+    scroll-behavior: auto; /* Managed by JS for the auto-scroll */
+    padding-bottom: 15px; /* Room for shadow */
+}
+.scrolling-wrapper::-webkit-scrollbar {
+    display: none; /* Safari and Chrome */
+}
+.scrolling-card {
+    flex: 0 0 auto;
+    width: 280px; 
+}
+@media (max-width: 768px) {
+    .scrolling-card {
+        width: 220px; /* Slightly smaller cards on mobile */
+    }
+}
+.col-lg-8 img,          /* Typical Bootstrap centered column for blogs */
+.blog-content img,      /* A common class name for blog post bodies */
+.article-body img,      /* Another common class name */
+main img {              /* A fallback for images in the main content area */
+    max-width: 100% !important; /* Force image to fit its container's width */
+    height: auto !important;    /* Maintain aspect ratio so the image doesn't stretch */
+    display: block;             /* Remove extra space below inline images */
+    margin: 1.5rem auto;        /* Center the image with some vertical spacing */
+    border-radius: 8px;         /* Optional: Adds nice rounded corners */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05); /* Optional: Adds a subtle professional shadow */
+}

@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Afrostreet - Khaki Fashion & Accessories{% endblock %}
+
+{% block content %}
+<div class="row">
+    <aside class="col-lg-3 d-none d-lg-block">
+        <div class="card border-0 shadow-sm h-100">
+            <div class="card-header bg-khaki text-white fw-bold">
+                Categories
+            </div>
+            <ul class="list-group list-group-flush" id="categorySidebar">
+                <li class="list-group-item text-muted">Loading...</li>
+            </ul>
+        </div>
+    </aside>
+
+    <div class="col-lg-9">
+        {% include 'components/_hero_banner.html' %}
+    </div>
+</div>
+
+<section class="mt-5 bg-white p-4 shadow-sm rounded" id="dealsSection">
+    <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+        <h4 class="fw-bold text-dark m-0">🔥 Top Deals</h4>
+        <a href="/promotions/deals/" class="text-decoration-none text-khaki fw-bold">See All ></a>
+    </div>
+    <div class="row g-3" id="dealsContainer">
+        <div class="col-12 text-center text-muted">Loading deals...</div>
+    </div>
+</section>
+
+<section class="mt-5 bg-white p-4 shadow-sm rounded" id="offersSection">
+    <div class="d-flex justify-content-between align-items-center mb-3 border-bottom pb-2">
+        <h4 class="fw-bold text-dark m-0">🏷️ Exclusive Offers</h4>
+        <a href="/promotions/offers/" class="text-decoration-none text-khaki fw-bold">See All ></a>
+    </div>
+    <div class="row g-3" id="offersContainer">
+        <div class="col-12 text-center text-muted">Loading offers...</div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/pages/home.js' %}"></script>
+{% endblock %}

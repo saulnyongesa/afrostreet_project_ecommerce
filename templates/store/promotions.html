@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Promotions | Afrostreet{% endblock %}
+
+{% block content %}
+<input type="hidden" id="promoType" value="{{ promo_type }}">
+
+<div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 shadow-sm rounded">
+    <h3 class="fw-bold text-dark m-0" id="promoTitle">Loading...</h3>
+    <span class="badge bg-khaki fs-6" id="promoCount"></span>
+</div>
+
+<div class="row g-3" id="promoContainer">
+    <div class="col-12 text-center py-5">
+        <div class="spinner-border text-khaki" role="status"></div>
+        <p class="mt-2 text-muted">Fetching the best prices...</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/pages/promotions.js' %}"></script>
+{% endblock %}

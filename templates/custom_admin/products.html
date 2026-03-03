@@ -1,0 +1,109 @@
+{% extends 'custom_admin/admin_base.html' %}
+{% load static %}
+
+{% block page_title %}Product Catalog{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h5 class="fw-bold text-dark m-0">Inventory</h5>
+    <button class="btn btn-khaki fw-bold shadow-sm" onclick="window.openProductModal()">
+        ➕ Add New Product
+    </button>
+</div>
+
+<div class="card admin-card p-0 overflow-hidden shadow-sm">
+    <div class="table-responsive" style="min-height: 400px;">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th class="ps-4">Product Details</th>
+                    <th>Category</th>
+                    <th>Price (KSh)</th>
+                    <th>Status</th>
+                    <th class="text-end pe-4">Actions</th>
+                </tr>
+            </thead>
+            <tbody id="productsTableBody">
+                <tr><td colspan="5" class="text-center py-5 text-muted"><div class="spinner-border spinner-border-sm"></div> Loading products...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="modal fade" id="productModal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-dark text-white border-0">
+                <h5 class="modal-title fw-bold" id="productModalTitle">Add Product</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body bg-light p-4">
+                <form id="productForm">
+                    <input type="hidden" id="productId">
+                    
+                    <div class="row g-4">
+                        <div class="col-lg-8">
+                            <div class="card border-0 shadow-sm p-3 mb-4">
+                                <label class="form-label fw-bold">Product Name</label>
+                                <input type="text" id="productName" class="form-control form-control-lg mb-3" required>
+                                
+                                <div class="row g-3 mb-3">
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold">Regular Price (KSh)</label>
+                                        <input type="number" id="productPrice" class="form-control" min="0" required>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-bold text-success">Discount Price (Optional)</label>
+                                        <input type="number" id="productDiscount" class="form-control" min="0">
+                                    </div>
+                                </div>
+
+                                <label class="form-label fw-bold">Description</label>
+                                <div id="productDescriptionEditor" style="min-height: 300px; background: white;"></div>
+                            </div>
+                        </div>
+                        
+                        <div class="col-lg-4">
+                            <div class="card border-0 shadow-sm p-3 mb-4">
+                                <label class="form-label fw-bold">Category</label>
+                                <select id="productCategory" class="form-select mb-3" required>
+                                    <option value="" disabled selected>Select a category...</option>
+                                    {% for category in categories %}
+                                        <option value="{{ category.id }}">{{ category.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+
+                            <div class="card border-0 shadow-sm p-3 mb-4">
+                                <label class="form-label fw-bold">Product Image (1:1 Square)</label>
+                                <input type="file" id="productImageInput" class="form-control mb-2" accept="image/*">
+                                <input type="hidden" id="productFinalImageUrl" required>
+                                <div class="text-center mt-2">
+                                    <img id="productImagePreview" class="img-fluid rounded shadow-sm d-none" style="width: 100%; object-fit: cover; aspect-ratio: 1/1;">
+                                </div>
+                            </div>
+
+                            <div class="card border-0 shadow-sm p-3">
+                                <label class="form-label fw-bold">Availability</label>
+                                <div class="form-check form-switch fs-5">
+                                    <input class="form-check-input" type="checkbox" id="productIsActive" checked>
+                                    <label class="form-check-label fs-6 mt-1 ms-2">In Stock / Active</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 bg-white">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-khaki fw-bold px-4" id="saveProductBtn">Save Product</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.ckeditor.com/ckeditor5/39.0.1/classic/ckeditor.js"></script>
+<script src="{% static 'js/admin/admin_products.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,57 @@
+<div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header bg-khaki text-white">
+                <h5 class="modal-title fw-bold" id="authModalLabel">Welcome to Afrostreet</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                
+                <div id="authAlert" class="alert alert-danger d-none" role="alert"></div>
+
+                <form id="loginForm">
+                    <h5 class="mb-3 fw-bold text-dark">Sign In</h5>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small">Email Address</label>
+                        <input type="email" id="loginEmail" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small">Password</label>
+                        <input type="password" id="loginPassword" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-khaki w-100 fw-bold py-2" id="loginBtn">
+                        Login
+                    </button>
+                    <div class="text-center mt-3">
+                        <span class="text-muted small">Don't have an account?</span>
+                        <a href="#" id="showRegister" class="text-khaki text-decoration-none fw-bold small">Register Here</a>
+                    </div>
+                </form>
+
+                <form id="registerForm" class="d-none">
+                    <h5 class="mb-3 fw-bold text-dark">Create Account</h5>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small">Full Name</label>
+                        <input type="text" id="regName" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small">Email Address</label>
+                        <input type="email" id="regEmail" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label text-muted small">Password</label>
+                        <input type="password" id="regPassword" class="form-control" required minlength="6">
+                    </div>
+                    <button type="submit" class="btn btn-dark w-100 fw-bold py-2" id="registerBtn">
+                        Register
+                    </button>
+                    <div class="text-center mt-3">
+                        <span class="text-muted small">Already have an account?</span>
+                        <a href="#" id="showLogin" class="text-khaki text-decoration-none fw-bold small">Login Here</a>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>

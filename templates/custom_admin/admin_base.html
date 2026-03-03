@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Afrostreet Admin{% endblock %}</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --admin-sidebar-width: 250px;
+            --admin-dark: #1e1e2d;
+            --admin-khaki: #c3a37a;
+            --admin-bg: #f4f6f9;
+        }
+        body {
+            background-color: var(--admin-bg);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            overflow-x: hidden;
+        }
+        /* Sidebar Styles */
+        #adminSidebar {
+            width: var(--admin-sidebar-width);
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: var(--admin-dark);
+            color: #a2a3b7;
+            z-index: 1040;
+            transition: all 0.3s ease;
+        }
+        #adminSidebar .nav-link {
+            color: #a2a3b7;
+            padding: 12px 20px;
+            margin: 4px 15px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        #adminSidebar .nav-link:hover, #adminSidebar .nav-link.active {
+            background-color: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
+        }
+        #adminSidebar .nav-link.active {
+            color: var(--admin-khaki);
+            font-weight: 600;
+        }
+        /* Main Content Wrapper */
+        #adminWrapper {
+            margin-left: var(--admin-sidebar-width);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        .admin-topbar {
+            background: #ffffff;
+            height: 60px;
+            box-shadow: 0 1px 15px rgba(0,0,0,0.04);
+            z-index: 1030;
+        }
+        /* Card styling for CMS feel */
+        .admin-card {
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.02);
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+
+    <aside id="adminSidebar" class="d-flex flex-column py-3 shadow-lg">
+        <a href="{% url 'admin_dashboard' %}" class="text-decoration-none text-white fs-4 fw-bold px-4 mb-4 d-flex align-items-center gap-2">
+            ✨ Afrostreet
+        </a>
+        <ul class="nav flex-column mb-auto">
+            <li class="nav-item">
+                <a href="{% url 'admin_dashboard' %}" class="nav-link active">📊 Dashboard</a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'admin_products' %}" class="nav-link">🛍️ Products</a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'admin_promotions' %}" class="nav-link">🎁 Promotions</a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'admin_orders' %}" class="nav-link">📦 Orders</a>
+            </li>
+            <li class="nav-item">
+                <a href="{% url 'admin_articles' %}" class="nav-link">✍️ Blog & Articles</a>
+            </li>
+            <li class="nav-item">
+                <a href="#" class="nav-link">👥 Customers</a>
+            </li>
+        </ul>
+        <hr class="border-secondary mx-3">
+        <div class="px-4 pb-3">
+            <a href="/" class="btn btn-outline-secondary btn-sm w-100 mb-2" target="_blank">View Live Site</a>
+            <span class="small">Logged in as: <strong>{{ request.user.full_name }}</strong></span>
+        </div>
+    </aside>
+
+    <div id="adminWrapper">
+        <header class="admin-topbar d-flex align-items-center justify-content-between px-4 sticky-top">
+            <h5 class="m-0 fw-bold text-dark" id="pageTitle">{% block page_title %}Overview{% endblock %}</h5>
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-sm btn-light border rounded-circle p-2">🔔</button>
+            </div>
+        </header>
+
+        <main class="p-4 flex-grow-1">
+            {% block content %}{% endblock %}
+        </main>
+    </div>
+    <div class="modal fade" id="cropperModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-dark text-white border-0">
+                    <h5 class="modal-title fw-bold">📐 Crop & Adjust Image</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0 bg-secondary text-center">
+                    <div style="max-height: 500px; width: 100%; overflow: hidden; display: flex; justify-content: center; align-items: center;">
+                        <img id="imageToCrop" src="" style="max-width: 100%; display: block;">
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0 d-flex justify-content-between">
+                    <div class="btn-group btn-group-sm" role="group">
+                        <button type="button" class="btn btn-outline-dark" onclick="window.AfroCropper.setRatio(1)">1:1 (Square)</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="window.AfroCropper.setRatio(16/9)">16:9 (Banner)</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="window.AfroCropper.setRatio(4/5)">4:5 (Portrait)</button>
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-khaki fw-bold" id="confirmCropBtn">
+                            Crop & Upload ☁️
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script src="{% static 'js/admin/admin_cropper.js' %}"></script>
+    
+    <script>
+        const getCSRFToken = () => {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; csrftoken=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+        };
+    </script>
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

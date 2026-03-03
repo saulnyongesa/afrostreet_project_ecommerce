@@ -1,0 +1,72 @@
+{% extends 'custom_admin/admin_base.html' %}
+{% load static %}
+{% block page_title %}Analytics Dashboard{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="btn-group shadow-sm" role="group">
+        <input type="radio" class="btn-check" name="timeframe" id="tfDaily" value="daily" autocomplete="off">
+        <label class="btn btn-outline-dark bg-white" for="tfDaily">Daily</label>
+
+        <input type="radio" class="btn-check" name="timeframe" id="tfWeekly" value="weekly" autocomplete="off">
+        <label class="btn btn-outline-dark bg-white" for="tfWeekly">Weekly</label>
+
+        <input type="radio" class="btn-check" name="timeframe" id="tfMonthly" value="monthly" autocomplete="off" checked>
+        <label class="btn btn-outline-dark bg-white" for="tfMonthly">Monthly</label>
+    </div>
+    
+    <button class="btn btn-danger shadow-sm d-flex align-items-center gap-2" id="exportPdfBtn">
+        📄 Export to PDF
+    </button>
+</div>
+
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card admin-card p-4 h-100">
+            <span class="text-muted small fw-bold text-uppercase">Total Revenue</span>
+            <h3 class="fw-bold text-dark mt-2 mb-0" id="metricRevenue">Loading...</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card admin-card p-4 h-100">
+            <span class="text-muted small fw-bold text-uppercase">Orders Placed</span>
+            <h3 class="fw-bold text-dark mt-2 mb-0" id="metricOrders">Loading...</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card admin-card p-4 h-100">
+            <span class="text-muted small fw-bold text-uppercase">New Customers</span>
+            <h3 class="fw-bold text-dark mt-2 mb-0" id="metricUsers">Loading...</h3>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card admin-card p-4 h-100 bg-dark text-white">
+            <span class="text-muted small fw-bold text-uppercase">Top Product</span>
+            <h5 class="fw-bold mt-2 mb-0 text-truncate" id="metricTopProduct">Loading...</h5>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card admin-card p-4">
+            <h6 class="fw-bold mb-4">Revenue Overview</h6>
+            <div style="height: 300px;">
+                <canvas id="revenueChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card admin-card p-4">
+            <h6 class="fw-bold mb-4">Order Status Breakdown</h6>
+            <div style="height: 300px;">
+                <canvas id="statusChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/admin/admin_dashboard.js' %}"></script>
+{% endblock %}

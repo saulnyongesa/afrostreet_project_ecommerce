@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Category | Afrostreet{% endblock %}
+
+{% block content %}
+<input type="hidden" id="categorySlug" value="{{ slug }}">
+
+<div class="d-flex justify-content-between align-items-center mb-4 bg-white p-3 shadow-sm rounded">
+    <h3 class="fw-bold text-dark m-0" id="categoryTitle">Loading Category...</h3>
+    <span class="text-muted" id="productCount"></span>
+</div>
+
+<div class="row g-3" id="categoryProductsContainer">
+    <div class="col-12 text-center py-5">
+        <div class="spinner-border text-khaki" role="status"></div>
+        <p class="mt-2 text-muted">Fetching products...</p>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/pages/category_detail.js' %}"></script>
+{% endblock %}
