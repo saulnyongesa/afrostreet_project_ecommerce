@@ -173,7 +173,7 @@ EMAIL_USE_TLS = os.getenv('EMAIL_USE_TLS', 'True') == 'True'
 EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 
-if 'DATABASE_URL' in os.environ:
+if 'HEROKU_POSTGRESQL_COBALT_URL' in os.environ:
     # Production (Heroku)
     DATABASES = {
         'default': dj_database_url.config(
