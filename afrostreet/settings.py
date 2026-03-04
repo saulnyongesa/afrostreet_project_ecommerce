@@ -78,10 +78,10 @@ WSGI_APPLICATION = 'afrostreet.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-if os.environ.get('HEROKU_POSTGRESQL_COBALT_URL'):
+if os.environ.get('DATABASE_URL'):
     DATABASES = {
         'default': dj_database_url.config(
-            env='HEROKU_POSTGRESQL_COBALT_URL',
+            env='DATABASE_URL',
             conn_max_age=600,
             ssl_require=True
         )
